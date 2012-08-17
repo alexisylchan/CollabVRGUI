@@ -325,8 +325,8 @@ void vtkVRConnectionManager::createButtons(int num_buttons, vtkPVXMLElement*& ro
 	}
 }
 
-void vtkVRConnectionManager::configureVRPNConnectionNStyle(const char* connection_name, const char* server_address,
-								int num_buttons, VRIConnectionType style_enum)
+void vtkVRConnectionManager::configureVRPNConnection(const char* connection_name, const char* server_address,
+								int num_buttons, VRIConnectionType type_enum)
 { 
 	vtkPVXMLElement* connection_xml = vtkPVXMLElement::New(); 
 	connection_xml->SetName("VRPNConnection");
@@ -336,7 +336,7 @@ void vtkVRConnectionManager::configureVRPNConnectionNStyle(const char* connectio
 	vtkPVXMLElement* device_xml = vtkPVXMLElement::New();
 	// For now only handle multiple buttons. 
     // TODO: Handle multiple trackers, allow user to specify tracker name (?)
-	switch(style_enum)
+	switch(type_enum)
 	{
 	case HEAD_TRACKER:
 		createButtons(num_buttons,connection_xml); 

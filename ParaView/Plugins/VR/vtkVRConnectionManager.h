@@ -79,8 +79,8 @@ public slots:
   /// Configuration
   void configureConnections( vtkPVXMLElement* xml, vtkSMProxyLocator* locator );
   void configureConnections();
-  void configureVRPNConnectionNStyle(const char* connection_name, const char* server_address,
-								int num_buttons, VRIConnectionType style_enum);
+  void configureVRPNConnection(const char* connection_name, const char* server_address,
+								int num_buttons, VRIConnectionType type_enum);
 
   // save the connection configuration
   void saveConnectionsConfiguration( vtkPVXMLElement* root );
