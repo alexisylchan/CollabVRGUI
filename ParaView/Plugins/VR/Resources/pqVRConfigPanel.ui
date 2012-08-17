@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>pqVRConfigPanel</class>
+ <widget class="QDockWidget" name="pqVRConfigPanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>401</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>VR Configuration</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <widget class="QSplitter" name="splitter">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>20</y>
+      <width>318</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QLabel" name="device_name_label">
+     <property name="text">
+      <string>Device Name</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="device_name_textedit"/>
+   </widget>
+   <widget class="QSplitter" name="splitter_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>60</y>
+      <width>318</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QLabel" name="vrpn_server_label">
+     <property name="text">
+      <string>VRPN Server Address </string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="vrpn_server_textedit"/>
+   </widget>
+   <widget class="QSplitter" name="splitter_3">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>100</y>
+      <width>318</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QLabel" name="number_of_buttons_label">
+     <property name="text">
+      <string>Number of buttons</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="number_of_buttons_spinbox"/>
+   </widget>
+   <widget class="QSplitter" name="splitter_4">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>140</y>
+      <width>318</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QLabel" name="interactor_style_label">
+     <property name="text">
+      <string>Style</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="interactor_style_combobox">
+     <item>
+      <property name="text">
+       <string>Head Tracking</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Phantom</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+   <widget class="QSplitter" name="splitter_5">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>210</y>
+      <width>318</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QPushButton" name="create_connection_button">
+     <property name="text">
+      <string>Create </string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
