@@ -67,6 +67,10 @@ public:
 
   virtual QString dockArea() const;
   virtual QDockWidget* dockWindow(QWidget* p);
+public slots:
+	void configureVRPNConnection(const char* connection_name, const char* server_address,
+							int num_buttons, int type_enum);
+	void configureStyles(const char* connection_name, int interactor_style);
 
 private:
   Q_DISABLE_COPY(pqVRStarter);

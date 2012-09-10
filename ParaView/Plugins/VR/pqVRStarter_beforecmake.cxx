@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QtDebug>
 #include <QTimer>
 #include <QDockWidget>
+#include <QMainWindow>
 #include "vtkPVVRConfig.h"
 #include "vtkProcessModule.h"
 #include "vtkPVXMLElement.h"
@@ -41,6 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "pqApplicationCore.h"
 #include "vtkVRConnectionManager.h"
 #include "pqVRConfigPanel.h"
+#include "pqCoreUtilities.h"
 
 //-----------------------------------------------------------------------------
 class pqVRStarter::pqInternals
@@ -79,6 +81,12 @@ void pqVRStarter::onStartup()
   this->Internals->EventQueue = new vtkVRQueue(this);
   this->Internals->ConnectionManager = new vtkVRConnectionManager(this->Internals->EventQueue,this);
   this->Internals->Handler = new vtkVRQueueHandler(this->Internals->EventQueue, this);
+ /* QWidget* mainWindow = pqCoreUtilities::mainWidget();
+  QMainWindow* mainWindow1 = qobject_cast<QMainWindow*>(mainWindow);
+  QDockWidget *dock = this->dockWindow(mainWindow1);
+  
+  mainWindow1->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dock);*/
+
   this->Internals->ConnectionManager->start();
   this->Internals->Handler->start();
   //qWarning() << "Message from pqVRStarter: Application Started";
@@ -110,15 +118,4 @@ QDockWidget* pqVRStarter::dockWindow(QWidget *p)
 		this->vrConfigPanel->setObjectName("pqVRConfigPanel");
 	}
 	return this->vrConfigPanel;
-}
-
-void pqVRStarter::configureStyles(const char* connection_name, int interactor_style)
-{
-	this->Internals->Handler->configureStyles(connection_name,vtkVRQueueHandler::VRInteractorStyle(interactor_style));
-}
-
-void pqVRStarter::configureVRPNConnection(const char* connection_name, const char* server_address,
-								int num_buttons, int type_enum)
-{
-	this->Internals->ConnectionManager->configureVRPNConnection(connection_name,server_address,num_buttons,vtkVRConnectionManager::VRConnectionType(type_enum));
 }

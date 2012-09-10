@@ -59,7 +59,6 @@ QT4_WRAP_CPP(MOC_SRCS
   vtkVRQueueHandler.h
   vtkVRInteractorStyle.h
   vtkVRStyleTracking.h
-  vtkVRStylePhantomPick.h
   vtkVRStyleGrabNUpdateMatrix.h
   vtkVRStyleGrabNRotateSliceNormal.h
   vtkVRStyleGrabNTranslateSliceOrigin.h
@@ -69,7 +68,11 @@ QT4_WRAP_CPP(MOC_SRCS
 if (PARAVIEW_BUILD_QT_GUI)
   QT4_WRAP_UI(UI_BUILT_SOURCES
       ${VR_PANEL_UI})   
-  QT4_ADD_RESOURCES(RCS_SRCS Resources/pqVRConfigPanel.qrc) 
+  QT4_ADD_RESOURCES(RCS_SRCS Resources/pqVRConfigPanel.qrc)
+  ADD_PARAVIEW_DOCK_WINDOW(
+    INSPECTOR_IFACE1 INSPECTOR_IFACE1_SRCS
+    CLASS_NAME pqVRStarter
+    DOCK_AREA Left)
 endif (PARAVIEW_BUILD_QT_GUI)
 
 
@@ -99,7 +102,6 @@ SET( VR_SOURCE_FILES
   vtkVRQueueHandler.cxx
   vtkVRInteractorStyle.cxx
   vtkVRStyleTracking.cxx
-  vtkVRStylePhantomPick.cxx
   vtkVRStyleGrabNUpdateMatrix.cxx
   vtkVRStyleGrabNRotateSliceNormal.cxx
   vtkVRStyleGrabNTranslateSliceOrigin.cxx
@@ -107,44 +109,20 @@ SET( VR_SOURCE_FILES
   ${MOC_SRCS}
   ${VR_PANEL_SOURCE_FILES})
 
-if (PARAVIEW_BUILD_QT_GUI)
- 
- SET(IFACES pqVRStarter)
- SET(ARG_CLASS_NAME pqVRStarter)
- SET(ARG_STARTUP onStartup)
- SET(ARG_SHUTDOWN onShutdown)
- SET(ARG_DOCK_AREA Bottom)
- SET(ARG_DOCK_CLASS_NAME pqVRConfigPanel)
- CONFIGURE_FILE (pqAutoStartAndDockWindowImplementation.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/${ARG_CLASS_NAME}Implementation.h @ONLY)
- CONFIGURE_FILE (pqAutoStartAndDockWindowImplementation.cxx.in
-  ${CMAKE_CURRENT_BINARY_DIR}/${ARG_CLASS_NAME}Implementation.cxx @ONLY)
+#ADD_PARAVIEW_AUTO_START(IFACES IFACE_SRCS CLASS_NAME pqVRStarter
+ #                       STARTUP onStartup
+  #                      SHUTDOWN onShutdown)
 
-GET_DIRECTORY_PROPERTY(include_dirs_tmp INCLUDE_DIRECTORIES)
-
- SET_DIRECTORY_PROPERTIES(PROPERTIES INCLUDE_DIRECTORIES "${QT_INCLUDE_DIRS};${PARAVIEW_GUI_INCLUDE_DIRS}")
-
- SET(ACTION_MOC_SRCS)
- QT4_WRAP_CPP(ACTION_MOC_SRCS ${CMAKE_CURRENT_BINARY_DIR}/${ARG_CLASS_NAME}Implementation.h)
- SET_DIRECTORY_PROPERTIES(PROPERTIES INCLUDE_DIRECTORIES "${include_dirs_tmp}")
-
-SET(IFACE_SRCS ${CMAKE_CURRENT_BINARY_DIR}/${ARG_CLASS_NAME}Implementation.cxx ${CMAKE_CURRENT_BINARY_DIR}/${ARG_CLASS_NAME}Implementation.h ${ACTION_MOC_SRCS})
- 
-else()
-  ADD_PARAVIEW_AUTO_START(
-    IFACES IFACE_SRCS CLASS_NAME pqVRStarter
-                        STARTUP onStartup
-                        SHUTDOWN onShutdown)
-
-endif (PARAVIEW_BUILD_QT_GUI)
 # create a plugin for this starter
 ADD_PARAVIEW_PLUGIN(
   VRPlugin "1.0"
   GUI_INTERFACES ${IFACES}
-   SOURCES pqVRStarter.cxx
+          ${INSPECTOR_IFACE1}
+  SOURCES pqVRStarter.cxx
           ${MOC_SRCS}
           ${VR_SOURCE_FILES}
-          ${RCS_SRCS} ${IFACE_SRCS} 
+          ${RCS_SRCS} ${IFACE_SRCS}
+	  ${INSPECTOR_IFACE1_SRCS}
   GUI_SOURCES ${UI_BUILT_SOURCES})
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/vtkPVVRConfig.h.in

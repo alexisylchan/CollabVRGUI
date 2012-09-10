@@ -29,5 +29,8 @@ void pqVRConfigPanel::onCreate()
 {
 	QString connection_name = this->Internals->device_name_textedit->toPlainText();
 	QString server_name = this->Internals->vrpn_server_textedit->toPlainText();
-	qWarning("hello world");
+	int num_buttons = this->Internals->number_of_buttons_spinbox->value();
+	int curr_style = this->Internals->interactor_style_combobox->currentIndex();
+	emit this->connectionSignal(connection_name.toAscii().data(),server_name.toAscii().data(),num_buttons,curr_style);
+	emit this->styleSignal(connection_name.toAscii().data(),curr_style);
 }

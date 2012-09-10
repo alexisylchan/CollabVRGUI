@@ -39,9 +39,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "vtkVRQueue.h"
 #include "vtkVRStyleTracking.h"
 #include "vtkVRStyleGrabNUpdateMatrix.h"
+#include "vtkVRStylePhantomPick.h"
 #include "vtkVRStyleGrabNRotateSliceNormal.h"
 #include "vtkVRStyleGrabNTranslateSliceOrigin.h"
 #include "vtkSMRenderViewProxy.h"
+#include "vtkSMProxyLocator.h"
 #include "pqApplicationCore.h"
 #include "pqActiveObjects.h"
 #include "pqView.h"
@@ -108,7 +110,6 @@ void vtkVRQueueHandler::clear()
 void vtkVRQueueHandler::start()
 {
   this->Internals->Timer.start();
-  this->configureStyles();
 }
 
 //----------------------------------------------------------------------------
@@ -257,7 +258,7 @@ void vtkVRQueueHandler::configureStyles()
 		return;
 	}
   
-	vtkSMProxyLocator* locator;// Placeholder, not actually used. TODO: change signature of style::configure
+	vtkSMProxyLocator* locator = vtkSMProxyLocator::New();// Placeholder, not actually used. TODO: change signature of style::configure
     if (xml->GetName() && strcmp(xml->GetName(), "VRInteractorStyles") == 0)
     {
     this->clear();
@@ -273,9 +274,9 @@ void vtkVRQueueHandler::configureStyles()
           style->configure(child, locator);
           this->add(style);
           }
-        else if (strcmp(class_name, "vtkVRStyleGrabNUpdateMatrix")==0)
+        else if (strcmp(class_name, "vtkVRStylePhantomPick")==0)
           {
-          vtkVRStyleGrabNUpdateMatrix* style = new vtkVRStyleGrabNUpdateMatrix(this);
+          vtkVRStylePhantomPick* style = new vtkVRStylePhantomPick(this);
           style->configure(child, locator);
           this->add(style);
           }
@@ -310,11 +311,11 @@ void vtkVRQueueHandler::configureStyles()
                           locator);
     }
 }
- 
+
 void vtkVRQueueHandler::configureStyles(const char* connection_name, VRInteractorStyle interactor_style)
 { 
 	vtkPVXMLElement* style_xml = vtkPVXMLElement::New();
-	vtkSMProxyLocator* locator;
+	vtkSMProxyLocator* locator = vtkSMProxyLocator::New();
 	vtkVRInteractorStyle* style;
 	style_xml->SetName("Style");
 	std::string concat_name;
@@ -340,7 +341,7 @@ void vtkVRQueueHandler::configureStyles(const char* connection_name, VRInteracto
 		break;
 
 	case PHANTOM_TRACKER_STYLE:
-		style_xml->AddAttribute("class","vtkVRStyleGrabNUpdateMatrix");
+		style_xml->AddAttribute("class","vtkVRStylePhantomPick");
 		style_xml->AddAttribute("set_property","RenderView1.WandPose");
 
 		tracker_xml = vtkPVXMLElement::New();
@@ -355,13 +356,13 @@ void vtkVRQueueHandler::configureStyles(const char* connection_name, VRInteracto
 		property_xml->AddAttribute("name", "RenderView1.WandPose");
 		style_xml->AddNestedElement(property_xml);  
 
-		style = new vtkVRStyleGrabNUpdateMatrix(this);
+		style = new vtkVRStylePhantomPick(this);
         style->configure(style_xml, locator);
         this->add(style);
 
 		break;
 	case ACTIVE_OBJ_TRACKER_STYLE:
-		style_xml->AddAttribute("class","vtkVRStyleGrabNUpdateMatrix");
+		style_xml->AddAttribute("class","vtkVRStylePhantomPick");
 		style_xml->AddAttribute("set_property","RenderView1.WandPose");
 
 		tracker_xml = vtkPVXMLElement::New();
@@ -376,7 +377,7 @@ void vtkVRQueueHandler::configureStyles(const char* connection_name, VRInteracto
 		property_xml->AddAttribute("name", "RenderView1.WandPose");
 		style_xml->AddNestedElement(property_xml);  
 
-		style = new vtkVRStyleGrabNUpdateMatrix(this);
+		style = new vtkVRStylePhantomPick(this);
         style->configure(style_xml, locator);
         this->add(style);
 		

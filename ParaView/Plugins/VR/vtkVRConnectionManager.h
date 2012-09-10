@@ -52,7 +52,7 @@ class vtkVRConnectionManager: public QObject
 public:
 	// Description:
 	// VR Connection Types
-	enum VRIConnectionType
+	enum VRConnectionType
 	{
 		HEAD_TRACKER = 0,  // for vtkVRStyleTracking
 		PHANTOM_TRACKER,   // for vtkVRStyleGrabNUpdateMatrix
@@ -80,7 +80,7 @@ public slots:
   void configureConnections( vtkPVXMLElement* xml, vtkSMProxyLocator* locator );
   void configureConnections();
   void configureVRPNConnection(const char* connection_name, const char* server_address,
-								int num_buttons, VRIConnectionType type_enum);
+								int num_buttons, VRConnectionType type_enum);
 
   // save the connection configuration
   void saveConnectionsConfiguration( vtkPVXMLElement* root );

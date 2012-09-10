@@ -41,6 +41,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef PARAVIEW_USE_VRUI
 #include "vtkVRUIConnection.h"
 #endif
+#include "vtkSMProxyLocator.h"
 #include "vtkPVXMLElement.h"
 #include "vtkPVXMLParser.h"
 #include "vtkVRQueue.h"
@@ -142,7 +143,6 @@ void vtkVRConnectionManager::start()
       }
     }
 #endif
-  this->configureConnections();
 }
 
 void vtkVRConnectionManager::stop()
@@ -250,7 +250,7 @@ void vtkVRConnectionManager::configureConnections(  )
 		return;
 	}	
 	
-	vtkSMProxyLocator* locator;// Placeholder, not actually used. TODO: change signature of device::configure
+	vtkSMProxyLocator* locator = vtkSMProxyLocator::New();// Placeholder, not actually used. TODO: change signature of device::configure
     
     if (xml->GetName() && strcmp(xml->GetName(), "VRConnectionManager") == 0)
       {
@@ -319,14 +319,14 @@ void vtkVRConnectionManager::createButtons(int num_buttons, vtkPVXMLElement*& ro
 		button_xml->SetName("Button");
 		osstream.clear();
 		osstream << i;
+		button_xml->AddAttribute("id",osstream.str().c_str());
 		button_xml->AddAttribute("name",osstream.str().c_str());
 		root_xml->AddNestedElement(button_xml);
 		//delete button_xml;
 	}
 }
-
 void vtkVRConnectionManager::configureVRPNConnection(const char* connection_name, const char* server_address,
-								int num_buttons, VRIConnectionType type_enum)
+								int num_buttons, VRConnectionType type_enum)
 { 
 	vtkPVXMLElement* connection_xml = vtkPVXMLElement::New(); 
 	connection_xml->SetName("VRPNConnection");
@@ -341,17 +341,20 @@ void vtkVRConnectionManager::configureVRPNConnection(const char* connection_name
 	case HEAD_TRACKER:
 		createButtons(num_buttons,connection_xml); 
 		device_xml->SetName("Tracker");
+		device_xml->AddAttribute("id","0");
 		device_xml->AddAttribute("name","HeadTracker");
 		connection_xml->AddNestedElement(device_xml); 
 		break;
 	case PHANTOM_TRACKER:
 		createButtons(num_buttons,connection_xml); 
 		device_xml->SetName("Tracker");
+		device_xml->AddAttribute("id","0");
 		device_xml->AddAttribute("name","PhantomTracker");
 		connection_xml->AddNestedElement(device_xml); 
 		break;
 	case ACTIVE_OBJ_TRACKER: 
 		device_xml->SetName("Analog");
+		device_xml->AddAttribute("id","0");
 		device_xml->AddAttribute("name","SpaceNavigator");
 		connection_xml->AddNestedElement(device_xml); 
 		break;
@@ -359,7 +362,7 @@ void vtkVRConnectionManager::configureVRPNConnection(const char* connection_name
 		break;
 	};
 	
-	vtkSMProxyLocator* locator;// Placeholder, not actually used. TODO: change signature of device::configure
+	vtkSMProxyLocator* locator = vtkSMProxyLocator::New();// Placeholder, not actually used. TODO: change signature of device::configure
 
 	#ifdef PARAVIEW_USE_VRPN        // TODO: Need to throw some warning if VRPN is
                                 // used when not compiled. For now we will
